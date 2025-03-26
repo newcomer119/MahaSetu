@@ -27,7 +27,7 @@ export default function Home() {
             </h1>
             <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
               Empowering citizens with seamless access to government services, efficient complaint
-              resolution, and real-time disaster alerts through advanced AI technology.
+              resolution, and real-time alerts and services through advanced AI technology.
             </p>
             <div className="flex justify-center space-x-4">
               {isSignedIn ? (
