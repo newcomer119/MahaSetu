@@ -47,7 +47,7 @@ export default function Home() {
                 </SignUpButton>
               )}
               <button
-                onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
+                onClick={() => navigate('/api-docs')}
                 className="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
               >
                 Learn More
@@ -70,33 +70,33 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <FeatureCard
               icon={<MessageSquare className="h-8 w-8" />}
-              title="Smart Complaint Resolution"
-              description="AI-powered system for efficient grievance redressal and tracking"
-            />
-            <FeatureCard
-              icon={<FileCheck className="h-8 w-8" />}
-              title="Document Verification"
-              description="Automated verification of government documents with high accuracy"
-            />
-            <FeatureCard
-              icon={<AlertTriangle className="h-8 w-8" />}
-              title="Disaster Alerts"
-              description="Real-time notifications for emergency situations and disasters"
-            />
-            <FeatureCard
-              icon={<Shield className="h-8 w-8" />}
-              title="Secure Platform"
-              description="End-to-end encryption and robust security measures"
+              title="AI-based Complaint Categorization"
+              description="Intelligent routing and prioritization of citizen complaints"
             />
             <FeatureCard
               icon={<Zap className="h-8 w-8" />}
-              title="Fast Processing"
-              description="Quick turnaround time for all government services"
+              title="Urgency Detection"
+              description="Automatic identification of high-priority cases"
             />
             <FeatureCard
               icon={<Users className="h-8 w-8" />}
-              title="Citizen Engagement"
-              description="Enhanced interaction between citizens and government"
+              title="Smart Chatbot"
+              description="24/7 instant responses to citizen queries"
+            />
+            <FeatureCard
+              icon={<Shield className="h-8 w-8" />}
+              title="Fraud Detection"
+              description="Advanced AI to eliminate fake complaints"
+            />
+            <FeatureCard
+              icon={<AlertTriangle className="h-8 w-8" />}
+              title="Real-time Tracking"
+              description="Live status updates for citizens and officials"
+            />
+            <FeatureCard
+              icon={<FileCheck className="h-8 w-8" />}
+              title="API Integration"
+              description="Easy integration with existing systems"
             />
           </div>
         </div>

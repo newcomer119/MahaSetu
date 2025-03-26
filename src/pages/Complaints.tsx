@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { MessageSquare, Search } from 'lucide-react';
-import { analyzeSentiment } from '../services/huggingface';
+import { analyzeText } from '../services/ai';
 import type { Complaint } from '../types';
 
 export default function Complaints() {
@@ -13,14 +13,13 @@ export default function Complaints() {
     setIsSubmitting(true);
     
     try {
-      // Analyze sentiment of the complaint
-      const sentiment = await analyzeSentiment(newComplaint.description);
-      const priority = getPriorityFromSentiment(sentiment.label);
+      // Analyze sentiment of the complaint using our AI service
+      const analysis = await analyzeText(newComplaint.description);
       
       const complaint: Complaint = {
         id: Math.random().toString(36).substr(2, 9),
         ...newComplaint,
-        status: priority === 'high' ? 'in-progress' : 'pending',
+        status: analysis.urgency === 'high' ? 'in-progress' : 'pending',
         createdAt: new Date().toISOString(),
       };
       
@@ -31,13 +30,6 @@ export default function Complaints() {
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  const getPriorityFromSentiment = (sentiment: string): 'low' | 'medium' | 'high' => {
-    const score = parseInt(sentiment.charAt(0));
-    if (score <= 2) return 'high';
-    if (score <= 3) return 'medium';
-    return 'low';
   };
 
   return (

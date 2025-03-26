@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FileCheck, Search, Upload } from 'lucide-react';
-import { detectFraud, analyzeDocument } from '../services/huggingface';
+import { detectFraudScore } from '../services/ai';
 import type { DocumentVerification } from '../types';
 
 export default function Documents() {
@@ -13,14 +13,13 @@ export default function Documents() {
     setIsAnalyzing(true);
     
     try {
-      // Analyze document for potential fraud
-      const fraudAnalysis = await detectFraud(newDocument.content);
-      const documentAnalysis = await analyzeDocument(newDocument.content);
+      // Analyze document for potential fraud using our AI service
+      const fraudAnalysis = await detectFraudScore(newDocument.content);
       
       const document: DocumentVerification = {
         id: Math.random().toString(36).substr(2, 9),
         documentType: newDocument.documentType,
-        status: getFraudProbability(fraudAnalysis) > 0.7 ? 'rejected' : 'verified',
+        status: fraudAnalysis.score > 0.7 ? 'rejected' : 'verified',
         submittedAt: new Date().toISOString(),
       };
       
@@ -31,10 +30,6 @@ export default function Documents() {
     } finally {
       setIsAnalyzing(false);
     }
-  };
-
-  const getFraudProbability = (analysis: any) => {
-    return analysis.score || 0;
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {

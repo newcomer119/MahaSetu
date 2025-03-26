@@ -7,8 +7,9 @@ import Complaints from './pages/Complaints';
 import Documents from './pages/Documents';
 import Alerts from './pages/Alerts';
 import Dashboard from './pages/Dashboard';
+import ApiDocs from './pages/ApiDocs';
 
-const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+const clerkPubKey = 'pk_test_bWFqb3ItY2l2ZXQtOTAuY2xlcmsuYWNjb3VudHMuZGV2JA';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <main>
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/api-docs" element={<ApiDocs />} />
               <Route
                 path="/dashboard"
                 element={
