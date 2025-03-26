@@ -5,6 +5,8 @@ export interface Complaint {
   status: 'pending' | 'in-progress' | 'resolved';
   category: string;
   createdAt: string;
+  isEmergency: boolean;
+  tracking: TrackingEvent[];
 }
 
 export interface DocumentVerification {
@@ -22,3 +24,9 @@ export interface DisasterAlert {
   description: string;
   timestamp: string;
 }
+
+type TrackingEvent = {
+  date: string;
+  status: string;
+  description: string;
+};

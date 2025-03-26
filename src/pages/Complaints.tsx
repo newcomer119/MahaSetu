@@ -5,8 +5,20 @@ import type { Complaint } from '../types';
 
 export default function Complaints() {
   const [complaints, setComplaints] = useState<Complaint[]>([]);
-  const [newComplaint, setNewComplaint] = useState({ title: '', description: '', category: '' });
+  const [newComplaint, setNewComplaint] = useState({ 
+    title: '', 
+    description: '', 
+    category: '',
+    isEmergency: false
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Add type for tracking events
+  type TrackingEvent = {
+    date: string;
+    status: string;
+    description: string;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,12 +31,17 @@ export default function Complaints() {
       const complaint: Complaint = {
         id: Math.random().toString(36).substr(2, 9),
         ...newComplaint,
-        status: analysis.urgency === 'high' ? 'in-progress' : 'pending',
+        status: newComplaint.isEmergency || analysis.urgency === 'high' ? 'in-progress' : 'pending',
         createdAt: new Date().toISOString(),
+        tracking: [{
+          date: new Date().toISOString(),
+          status: 'submitted',
+          description: 'Complaint filed'
+        }]
       };
       
       setComplaints([complaint, ...complaints]);
-      setNewComplaint({ title: '', description: '', category: '' });
+      setNewComplaint({ title: '', description: '', category: '', isEmergency: false });
     } catch (error) {
       console.error('Error submitting complaint:', error);
     } finally {
@@ -76,6 +93,19 @@ export default function Complaints() {
             />
           </div>
           
+          <div className="flex items-center mb-4">
+            <input
+              type="checkbox"
+              id="emergency"
+              checked={newComplaint.isEmergency}
+              onChange={(e) => setNewComplaint({ ...newComplaint, isEmergency: e.target.checked })}
+              className="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded"
+            />
+            <label htmlFor="emergency" className="ml-2 block text-sm text-red-700 font-medium">
+              This is an emergency
+            </label>
+          </div>
+          
           <button
             type="submit"
             disabled={isSubmitting}
@@ -104,7 +134,14 @@ export default function Complaints() {
           {complaints.map((complaint) => (
             <div key={complaint.id} className="border rounded-lg p-4">
               <div className="flex items-center justify-between mb-2">
-                <h3 className="text-lg font-semibold text-gray-900">{complaint.title}</h3>
+                <h3 className="text-lg font-semibold text-gray-900">
+                  {complaint.isEmergency && (
+                    <span className="inline-flex items-center mr-2 px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                      EMERGENCY
+                    </span>
+                  )}
+                  {complaint.title}
+                </h3>
                 <span className={`px-2 py-1 rounded-full text-sm ${
                   complaint.status === 'resolved' ? 'bg-green-100 text-green-800' :
                   complaint.status === 'in-progress' ? 'bg-yellow-100 text-yellow-800' :
@@ -114,9 +151,27 @@ export default function Complaints() {
                 </span>
               </div>
               <p className="text-gray-600 mb-2">{complaint.description}</p>
-              <div className="flex items-center text-sm text-gray-500">
+              <div className="flex items-center text-sm text-gray-500 mb-4">
                 <span className="mr-4">Category: {complaint.category}</span>
                 <span>Submitted: {new Date(complaint.createdAt).toLocaleDateString()}</span>
+              </div>
+              
+              {/* Tracking Timeline */}
+              <div className="border-t pt-4 mt-4">
+                <h4 className="text-sm font-medium text-gray-900 mb-2">Tracking History</h4>
+                <div className="space-y-3">
+                  {complaint.tracking?.map((event, index) => (
+                    <div key={index} className="flex items-start">
+                      <div className="flex-shrink-0 h-4 w-4 rounded-full bg-blue-400 mt-1"></div>
+                      <div className="ml-3">
+                        <p className="text-sm text-gray-600">{event.description}</p>
+                        <p className="text-xs text-gray-500">
+                          {new Date(event.date).toLocaleString()}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           ))}
